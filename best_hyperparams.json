@@ -1,0 +1,1 @@
+{"num_layers": 3, "layer_0_units": 256, "layer_1_units": 256, "layer_2_units": 128, "lr": 0.001, "dropout": 0.2, "batch_size": 32}
