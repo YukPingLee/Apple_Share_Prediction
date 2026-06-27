@@ -1,6 +1,8 @@
+------------------------------------------------------------------------------------------------
 Project: Apple Share Price Prediction Using Deep Learning
 ------------------------------------------------------------------------------------------------
 Overview
+------------------------------------------------------------------------------------------------
 This project investigates the use of deep learning models for forecasting the closing price of Apple Inc. (AAPL) stock using historical market data.
 
 ------------------------------------------------------------------------------------------------
@@ -11,6 +13,7 @@ Two Multi-Layer Perceptron (MLP) models were implemented and compared:
 • PyTorch MLP
 
 The project covers the complete machine learning workflow, including data collection, preprocessing, feature engineering, hyperparameter optimisation, model training, evaluation, and saving trained models for future inference.
+
 ------------------------------------------------------------------------------------------------
 Dataset
 ------------------------------------------------------------------------------------------------
