@@ -6,9 +6,9 @@ This project investigates the use of deep learning models for forecasting the cl
 ------------------------------------------------------------------------------------------------
 Two Multi-Layer Perceptron (MLP) models were implemented and compared:
 
-•	TensorFlow/Keras MLP
+• TensorFlow/Keras MLP
 
-•	PyTorch MLP
+• PyTorch MLP
 
 The project covers the complete machine learning workflow, including data collection, preprocessing, feature engineering, hyperparameter optimisation, model training, evaluation, and saving trained models for future inference.
 ------------------------------------------------------------------------------------------------
@@ -17,17 +17,27 @@ Dataset
 Historical stock market data was downloaded using the Yahoo Finance API through the yfinance Python library.
 The dataset contains daily trading information, including:
 
-•	Open price
+- Apple Open Price
 
-•	High price
+- Apple High Price
 
-•	Low price
+- Apple Low Price
 
-•	Close price
+- Apple Close Price
 
-•	Adjusted Close price
+- Apple Trading Volume
 
-•	Trading Volume
+- NASDAQ Composite Index
+
+- S&P 500 Index
+
+- CBOE Volatility Index (VIX)
+
+- US Dollar Index (DXY)
+
+- US Treasury Yield
+
+- PHLX Semiconductor Index (SOX)
 
 The closing price was used as the prediction target.
  
@@ -49,11 +59,11 @@ Instead of predicting tomorrow's price from only today's price, the model uses t
 For example:
 
 Input	Target
-Days 1–30	Day 31
-Days 2–31	Day 32
-Days 3–32	Day 33
+Days 1–30	Closing Prices for Days 31-40
+Days 2–31	Closing Prices for Days 32-41
+Days 3–32	Closing Prices for Days 33-42
 
-This allows the neural network to learn short-term trends and temporal patterns from recent market behaviour.
+This approach enables the model to perform multi-step forecasting, predicting an entire sequence of future prices instead of only the next trading day.
 ------------------------------------------------------------------------------------------------
 Models
 ------------------------------------------------------------------------------------------------
