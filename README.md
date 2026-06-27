@@ -117,14 +117,13 @@ best_hyperparams.json
 Repository Structure
 ------------------------------------------------------------------------------------------------
 Apple_Share_Prediction/
-│
-├── MLP_TensorFlow.ipynb
-├── MLP_Torch.ipynb
-├── best_hyperparams.json
-├── mlp_model_tensorflow.keras
-├── mlp_torch_checkpoint.pth
-├── requirements.txt
-└── README.md
+- MLP_TensorFlow.ipynb
+- MLP_Torch.ipynb
+- best_hyperparams.json
+- mlp_model_tensorflow.keras
+- mlp_torch_checkpoint.pth
+- requirements.txt
+- README.md
 
 ------------------------------------------------------------------------------------------------
 Results and Discussion
