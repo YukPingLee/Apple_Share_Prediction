@@ -5,7 +5,6 @@ Overview
 ------------------------------------------------------------------------------------------------
 This project investigates the use of deep learning models for forecasting the closing price of Apple Inc. (AAPL) stock using historical market data.
 
-------------------------------------------------------------------------------------------------
 Two Multi-Layer Perceptron (MLP) models were implemented and compared:
 
 • TensorFlow/Keras MLP
@@ -67,6 +66,7 @@ Days 2–31	Closing Prices for Days 32-41
 Days 3–32	Closing Prices for Days 33-42
 
 This approach enables the model to perform multi-step forecasting, predicting an entire sequence of future prices instead of only the next trading day.
+
 ------------------------------------------------------------------------------------------------
 Models
 ------------------------------------------------------------------------------------------------
@@ -125,6 +125,7 @@ Apple_Share_Prediction/
 ├── mlp_torch_checkpoint.pth
 ├── requirements.txt
 └── README.md
+
 ------------------------------------------------------------------------------------------------
 Results and Discussion
 ------------------------------------------------------------------------------------------------
