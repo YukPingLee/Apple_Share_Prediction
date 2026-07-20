@@ -1,162 +1,98 @@
-------------------------------------------------------------------------------------------------
-Project: Apple Share Price Prediction Using Deep Learning
-------------------------------------------------------------------------------------------------
-Overview
-------------------------------------------------------------------------------------------------
-This project investigates the use of deep learning models for forecasting the closing price of Apple Inc. (AAPL) stock using historical market data.
+# Apple Share Price Prediction Using Deep Learning
 
-Two Multi-Layer Perceptron (MLP) models were implemented and compared:
+Forecasting the closing price of Apple Inc. (AAPL) stock from historical market data,
+using two Multi-Layer Perceptron (MLP) implementations built independently in
+TensorFlow/Keras and PyTorch.
 
-• TensorFlow/Keras MLP
+The project covers the full workflow: data collection, preprocessing, feature
+engineering, hyperparameter optimisation, training, evaluation, and model checkpointing.
 
-• PyTorch MLP
+## Dataset
 
-The project covers the complete machine learning workflow, including data collection, preprocessing, feature engineering, hyperparameter optimisation, model training, evaluation, and saving trained models for future inference.
+Daily market data is pulled via the [`yfinance`](https://pypi.org/project/yfinance/)
+library and includes:
 
-------------------------------------------------------------------------------------------------
-Dataset
-------------------------------------------------------------------------------------------------
-Historical stock market data was downloaded using the Yahoo Finance API through the yfinance Python library.
-The dataset contains daily trading information, including:
+| Feature | Description |
+|---|---|
+| AAPL Open / High / Low / Close | Apple's daily price action |
+| AAPL Volume | Apple's daily trading volume |
+| NASDAQ Composite | Broad tech-market index |
+| S&P 500 | Broad market index |
+| VIX | CBOE Volatility Index |
+| DXY | US Dollar Index |
+| US Treasury Yield | Interest-rate benchmark |
+| SOX | PHLX Semiconductor Index |
 
-- Apple Open Price
+**Target:** AAPL closing price.
 
-- Apple High Price
+## Preprocessing
 
-- Apple Low Price
+1. Drop rows with missing values.
+2. Normalise closing prices with Min-Max scaling.
+3. Convert the series into supervised samples with a **30-day sliding window**.
 
-- Apple Close Price
+The model predicts a sequence of future closes from a window of past closes, rather than
+a single next-day value:
 
-- Apple Trading Volume
+| Input (days) | Target (days) |
+|---|---|
+| 1–30 | 31–40 |
+| 2–31 | 32–41 |
+| 3–32 | 33–42 |
 
-- NASDAQ Composite Index
+This lets the model do multi-step forecasting instead of single-step prediction.
 
-- S&P 500 Index
+## Models
 
-- CBOE Volatility Index (VIX)
+**TensorFlow / Keras** — Sequential MLP, ReLU activations, dropout regularisation, Adam
+optimiser.
 
-- US Dollar Index (DXY)
+**PyTorch** — Custom MLP, ReLU activations, Adam optimiser, checkpoint saving.
 
-- US Treasury Yield
+## Hyperparameter Optimisation
 
-- PHLX Semiconductor Index (SOX)
+The TensorFlow model's hyperparameters were tuned with [Optuna](https://optuna.org/),
+searching over the number of hidden layers, neurons per layer, learning rate, dropout
+rate, and batch size. The best configuration is saved in
+[`best_hyperparams.json`](best_hyperparams.json).
 
-The closing price was used as the prediction target.
- 
-------------------------------------------------------------------------------------------------
-Data Preprocessing
-------------------------------------------------------------------------------------------------
-Before training the models:
+## Repository Structure
 
-•	Missing values were removed.
-
-•	Closing prices were normalised using Min-Max Scaling.
-
-•	The data was transformed into supervised learning samples using a 30-day sliding window.
-
-------------------------------------------------------------------------------------------------
-Sliding Window
-------------------------------------------------------------------------------------------------
-Instead of predicting tomorrow's price from only today's price, the model uses the previous 30 trading days as input.
-For example:
-
-Input	Target
-Days 1–30	Closing Prices for Days 31-40
-Days 2–31	Closing Prices for Days 32-41
-Days 3–32	Closing Prices for Days 33-42
-
-This approach enables the model to perform multi-step forecasting, predicting an entire sequence of future prices instead of only the next trading day.
-
-------------------------------------------------------------------------------------------------
-Models
-------------------------------------------------------------------------------------------------
-Two implementations were developed:
-
-TensorFlow / Keras
-
-•	Sequential Multi-Layer Perceptron
-
-•	ReLU activation
-
-•	Dropout regularisation
-
-•	Adam optimiser
-
-PyTorch
-
-•	Custom Multi-Layer Perceptron
-
-•	ReLU activation
-
-•	Adam optimiser
-
-•	Model checkpoint saving
- 
-------------------------------------------------------------------------------------------------
-Hyperparameter Optimisation
-------------------------------------------------------------------------------------------------
-Hyperparameters for the TensorFlow model were optimised using Optuna.
-
-The search included:
-
-•	Number of hidden layers
-
-•	Number of neurons
-
-•	Learning rate
-
-•	Dropout rate
-
-•	Batch size
-
-The best configuration is stored in:
-
-best_hyperparams.json
-
-------------------------------------------------------------------------------------------------
-Repository Structure
-------------------------------------------------------------------------------------------------
+```
 Apple_Share_Prediction/
-- MLP_TensorFlow.ipynb
-- MLP_Torch.ipynb
-- best_hyperparams.json
-- mlp_model_tensorflow.keras
-- mlp_torch_checkpoint.pth
-- requirements.txt
-- README.md
+├── MLP_TensorFlow.ipynb        # TensorFlow/Keras implementation
+├── MLP_Torch.ipynb             # PyTorch implementation
+├── best_hyperparams.json       # Optuna-tuned hyperparameters
+├── mlp_model_tensorflow.keras  # Trained TensorFlow model
+├── mlp_torch_checkpoint.pth    # Trained PyTorch checkpoint
+├── requirements.txt
+└── README.md
+```
 
-------------------------------------------------------------------------------------------------
-Results and Discussion
-------------------------------------------------------------------------------------------------
-Both TensorFlow and PyTorch implementations successfully learned the general trend of Apple's stock price.
+## Results
 
-However, the predicted prices can differ noticeably from the actual market prices. This is expected for several reasons:
+Both implementations learn the general trend of Apple's stock price, but predictions
+can diverge noticeably from actual prices. This is expected:
 
-• Stock prices are highly volatile and influenced by many external factors such as company news, earnings reports, macroeconomic events, and investor sentiment.
+- Stock prices are driven by news, earnings, macroeconomic events, and sentiment — none
+  of which this model sees.
+- The model uses only historical price data, with no technical indicators or economic
+  features.
+- An MLP treats each 30-day window as a fixed feature vector, with no explicit modelling
+  of long-term temporal dependencies (unlike recurrent or attention-based architectures).
+- Financial markets are noisy and non-stationary, so exact price prediction is inherently
+  unreliable.
 
-• The model only uses historical price information and does not incorporate news, technical indicators, market indices, or economic data.
+The model is a useful demonstration of applying deep learning to financial time series,
+capturing overall trend rather than precise future prices.
 
-• A Multi-Layer Perceptron treats each 30-day window as a fixed feature vector and does not explicitly model long-term temporal dependencies like recurrent or attention-based architectures.
+## Future Improvements
 
-• Predicting future stock prices is inherently uncertain because financial markets are noisy and non-stationary.
+- LSTM-based forecasting
+- Transformer-based forecasting
+- Technical indicators (Moving Average, RSI, MACD, Bollinger Bands)
+- Additional market/economic features
 
-Although the model may not accurately predict the exact future price, it is able to capture the overall market trend and demonstrates the application of deep learning techniques to financial time series forecasting.
+## License
 
-------------------------------------------------------------------------------------------------
-Future Improvements
-------------------------------------------------------------------------------------------------
-Potential extensions include:
-
-•	Implement Long Short-Term Memory (LSTM) networks
-
-•	Implement Transformer-based forecasting models
-
-•	Add technical indicators (e.g. Moving Average, RSI, MACD, Bollinger Bands)
-
-•	Include additional market and economic features
-
-------------------------------------------------------------------------------------------------
-License
-------------------------------------------------------------------------------------------------
-This project was developed for educational purposes and as part of a machine learning portfolio.
-
+Developed for educational purposes as part of a machine learning portfolio.
